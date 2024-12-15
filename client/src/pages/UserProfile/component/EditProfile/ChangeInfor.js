@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 import './EditProfile.scss';
 import { putUpdateUser } from '../../../../services/apiServices';
 import ChangePassword from './ChangePassword';
+import axios from 'axios';
 
 function ChangeInfor(props) {
     const [show, setShow] = useState(false);
@@ -19,7 +20,6 @@ function ChangeInfor(props) {
             const res = await putUpdateUser(id, newInfor);
 
             const data = res.data;
-            console.log(data);
 
             if (res.status !== 200) {
                 throw new Error(res.message || 'Something went wrong');
@@ -43,7 +43,7 @@ function ChangeInfor(props) {
             phoneNumber: props.userInfor.phoneNumber,
             CMND: props.userInfor.CMND,
             address: props.userInfor.address,
-            typeUser: ''
+            typeUser: '',
         },
 
         validationSchema: Yup.object({
@@ -60,18 +60,17 @@ function ChangeInfor(props) {
         }),
 
         onSubmit: (newInfor) => {
-            let typeUser
+            let typeUser;
             for (const radioButton of document.querySelectorAll('input[name="typeUser"]')) {
                 if (radioButton.checked) {
-                    typeUser = radioButton.value
+                    typeUser = radioButton.value;
                 }
             }
-            newInfor.typeUser = typeUser
+            newInfor.typeUser = typeUser;
+            newInfor.avatar = formik.values.avatar;
             changeInfor(props.userInfor._id, newInfor);
         },
     });
-
-
     return (
         <div className="container-xl px-4">
             <nav className="nav nav-borders nav-borders-handle">
@@ -87,15 +86,50 @@ function ChangeInfor(props) {
                         <div className="card-body text-center">
                             <img
                                 className="img-account-profile rounded-circle mb-2 img-account-profile-handle"
-                                src="http://bootdey.com/img/Content/avatar/avatar1.png"
-                                alt=""
+                                src={formik.values.avatar || props.userInfor.avatar}
+                                alt="Avatar"
                             />
 
                             <div className="small font-italic text-muted mb-4">JPG hoặc PNG không lớn hơn 5 MB</div>
 
-                            <button className="btn btn-primary" type="button">
+                            <button
+                                className="btn btn-primary"
+                                type="button"
+                                onClick={() => document.getElementById('upload-avatar').click()}
+                            >
                                 Tải ảnh mới
                             </button>
+                            <input
+                                id="upload-avatar"
+                                type="file"
+                                accept="image/png, image/jpeg"
+                                style={{ display: 'none' }}
+                                onChange={async (e) => {
+                                    const file = e.target.files[0];
+                                    if (!file) return;
+
+                                    const formData = new FormData();
+                                    formData.append('file', file);
+                                    formData.append('upload_preset', 'yoga-website'); // Thay bằng upload_preset của bạn
+                                    formData.append('cloud_name', 'degfccw8e'); // Thay bằng cloud_name của bạn
+
+                                    try {
+                                        const response = await axios.post(
+                                            `https://api.cloudinary.com/v1_1/degfccw8e/image/upload`,
+                                            formData,
+                                        );
+
+                                        if (response.status === 200) {
+                                            const avatarUrl = response.data.secure_url;
+                                            toast.success('Tải ảnh lên thành công!');
+                                            formik.setFieldValue('avatar', avatarUrl); // Cập nhật giá trị avatar
+                                        }
+                                    } catch (error) {
+                                        toast.error('Tải ảnh thất bại. Vui lòng thử lại.');
+                                        console.error(error);
+                                    }
+                                }}
+                            />
                         </div>
                     </div>
                 </div>
@@ -198,9 +232,12 @@ function ChangeInfor(props) {
                                                 id="Inland"
                                                 defaultChecked={props.userInfor.typeUser === 'Inland'}
                                             />
-                                            <label htmlFor="Inland" >Trong nước</label>
+                                            <label htmlFor="Inland">Trong nước</label>
 
-                                            <input type="radio" name="typeUser" value="Foreign"
+                                            <input
+                                                type="radio"
+                                                name="typeUser"
+                                                value="Foreign"
                                                 id="Foreign"
                                                 defaultChecked={props.userInfor.typeUser === 'Foreign'}
                                             />

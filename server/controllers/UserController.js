@@ -8,7 +8,8 @@ const jwt = require('jsonwebtoken');
 // @access  Private
 
 const changeInfo = asyncHandler(async (req, res) => {
-    const { username, email, Name, phoneNumber, CMND, address, typeUser, isAdmin } = req.body;
+    const { username, email, Name, phoneNumber, CMND, address, typeUser, isAdmin, avatar } = req.body;
+    console.log(avatar);
     const id = req.params.id;
 
     if (!username && !email && !Name && !CMND && !address && !typeUser && !isAdmin) {
@@ -26,6 +27,7 @@ const changeInfo = asyncHandler(async (req, res) => {
             user.CMND = CMND;
             user.address = address;
             user.typeUser = typeUser;
+            user.avatar = avatar;
             if (isAdmin == undefined) {
                 user.isAdmin = user.isAdmin;
             } else {
@@ -191,7 +193,7 @@ const getUsersWithPagination = asyncHandler(async (req, res) => {
 // @route   POST /api/users
 // @access  Private
 const addUser = asyncHandler(async (req, res) => {
-    const { username, email, password, Name, phoneNumber, CMND, address, isAdmin, typeUser } = req.body;
+    const { username, email, password, Name, phoneNumber, CMND, address, isAdmin, typeUser, avatar } = req.body;
     if (!username || !email || !password || !Name || !CMND || !address || !phoneNumber || !typeUser) {
         res.status(400);
         throw new Error('Please fill all the fields');
@@ -213,6 +215,7 @@ const addUser = asyncHandler(async (req, res) => {
             address,
             isAdmin,
             typeUser,
+            avatar,
         });
         const user = await newUser.save();
         if (user) {

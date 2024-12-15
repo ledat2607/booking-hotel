@@ -28,7 +28,9 @@ function Sidebar() {
             </div>
             <div className="img img-sidebar bg-wrap text-center py-4" id="avt">
                 <div className="user-logo">
-                    <div className="img img-sidebar"></div>
+                    <div className="img-sidebar">
+                        <img src={user.avatar} alt="" className="img" />
+                    </div>
                     <h3>{user.username}</h3>
                 </div>
             </div>

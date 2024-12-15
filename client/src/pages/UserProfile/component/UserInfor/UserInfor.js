@@ -38,7 +38,7 @@ function User_infor() {
                     <div className="card-body text-center d-flex align-items-center justify-content-center">
                         <div>
                             <img
-                                src={avt}
+                                src={infor.user.avatar || avt}
                                 alt="avatar"
                                 className="rounded-circle img-fluid"
                                 style={{ width: 150 + 'px' }}

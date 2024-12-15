@@ -27,6 +27,9 @@ const UserSchema = new Schema(
             enum: ['Inland', 'Foreign'],
             default: 'Inland',
         },
+        avatar: {
+            type: String,
+        },
         CMND: {
             type: String,
             default: '',

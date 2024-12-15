@@ -20,6 +20,7 @@ const getFavoriteRoomsByUserId = async (req, res) => {
     }
 };
 
+
 const checkFavoriteRoomsByRoomId = async (req, res) => {
     const { roomId } = req.params;
     try {
