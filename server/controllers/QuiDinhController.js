@@ -30,26 +30,24 @@ const getQuiDinh = async (req, res) => {
 const updateQuiDinh = async (req, res) => {
     try {
         const { heSo, phuThu } = req.body;
+
         const law = await QuiDinh.findOneAndUpdate(
             {},
             {
                 heSo,
                 phuThu,
             },
-            { new: true },
+            {
+                new: true,
+                upsert: true,
+            },
         );
-        if (law) {
-            return res.status(200).json({
-                success: true,
-                message: 'Law updated successfully',
-                law,
-            });
-        } else {
-            return res.status(404).json({
-                success: false,
-                message: 'Law not found',
-            });
-        }
+
+        return res.status(200).json({
+            success: true,
+            message: law ? 'Law updated successfully' : 'Law created successfully',
+            law,
+        });
     } catch (error) {
         return res.status(500).json({
             success: false,

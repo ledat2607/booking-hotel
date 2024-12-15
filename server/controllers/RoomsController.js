@@ -3,7 +3,7 @@ const Rooms = require('../models/Room');
 const RoomType = require('../models/RoomType');
 const Booking = require('../models/Booking');
 const fs = require('fs');
-
+const cloudinary = require('../cloudinaryConfig.js'); 
 // @desc    Fetch all rooms
 // @route   GET /api/rooms
 // @access  Public
@@ -143,14 +143,20 @@ const createRoom = asyncHandler(async (req, res) => {
         }
 
         let ImagesArray = [];
-        req.files.forEach((element) => {
+
+        // Upload các ảnh lên Cloudinary
+        for (const element of req.files) {
+            const uploadedImage = await cloudinary.uploader.upload(element.path, {
+                folder: 'rooms', // Bạn có thể chọn thư mục trong Cloudinary
+            });
             const file = {
                 fileName: element.originalname,
-                filePath: element.path,
+                filePath: uploadedImage.secure_url, // Đường dẫn ảnh đã upload trên Cloudinary
                 fileType: element.mimetype,
             };
             ImagesArray.push(file);
-        });
+        }
+
         const Price = typeIsTrue.price;
 
         const room = await Rooms.create({
@@ -162,6 +168,7 @@ const createRoom = asyncHandler(async (req, res) => {
             price: Price,
             note,
         });
+
         if (room) {
             res.status(201).json({
                 success: true,
@@ -178,7 +185,6 @@ const createRoom = asyncHandler(async (req, res) => {
         });
     }
 });
-
 // @desc    Update a room
 // @route   PUT /api/rooms/:id
 // @access  Private/Admin
@@ -511,6 +517,9 @@ const getRoomsFilter = asyncHandler(async (req, res) => {
                         const newCheckInDate = new Date(rentperDate);
                         const newCheckOutDate = new Date(checkOutDate);
                         const booking = await Booking.findById(currentBookings[j]);
+                        if (!booking) {
+                            continue; 
+                        }
                         const currentCheckInDate = new Date(booking.checkInDate);
                         const currentCheckOutDate = new Date(booking.checkOutDate);
 

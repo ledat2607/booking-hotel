@@ -36,6 +36,7 @@ const RoomsScreen = () => {
             toast.error('Vui lòng chọn ngày nhận/trả phòng');
             return;
         }
+        // Dispatch search data to redux store
         dispatch(
             searchSlice.actions.setSearchContent({
                 dateStart: dateRange[0].startDate.toString(),
@@ -44,6 +45,7 @@ const RoomsScreen = () => {
                 price: document.getElementById('price-room').value,
             }),
         );
+        // Navigate to /search/1
         navigate('/search/1');
     };
 
@@ -121,18 +123,7 @@ const RoomsScreen = () => {
                                                 setIsShowDateRange={setIsShowDateRange}
                                             />
                                         </div>
-                                        {/* <label htmlFor="checkIn">Ngày nhận phòng</label>
-                                        <input type="date" className="form-control" id="checkIn" name="checkin-date" /> */}
                                     </div>
-                                    {/* <div className="col-6 col-md-2 col-lg-3">
-                                        <label htmlFor="checkOut">Ngày trả phòng</label>
-                                        <input
-                                            type="date"
-                                            className="form-control"
-                                            id="checkOut"
-                                            name="checkout-date"
-                                        />
-                                    </div> */}
                                     <div className="col-4 col-md-1" style={{ width: '150px' }}>
                                         <label htmlFor="type-room">Loại:</label>
                                         <select name="type-room" id="type-room" className="form-control form-select">

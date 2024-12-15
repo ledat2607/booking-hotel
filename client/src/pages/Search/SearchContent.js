@@ -113,13 +113,13 @@ function SearchContent(props) {
                             <i className="fa fa-angle-left"></i>Trước{' '}
                         </div>
                     </li>
-                    {listPage.map((page) => (
+                    {/* {listPage.map((page) => (
                         <li className="page-item page" key={page}>
                             <NavLink to={`/search/${page}`} className="page-link" onClick={handleChangePage}>
                                 {page}
                             </NavLink>
                         </li>
-                    ))}
+                    ))} */}
                     <li className="page-item" id="next-btn">
                         <div className="page-link" onClick={handleNextPage}>
                             Sau <i className="fa fa-angle-right"></i>

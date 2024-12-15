@@ -73,7 +73,8 @@ function App() {
                 />
                 {isAuthenticated ? (
                     <Route path="/login" element={<Navigate to="/" />} />
-                ) : (<Route path="/login" element={<Login />} />
+                ) : (
+                    <Route path="/login" element={<Login />} />
                 )}
 
                 {isAuthenticated ? (
@@ -95,7 +96,6 @@ function App() {
                         <Route path="/user/edit-profile" element={<EditProfile />} />
                         <Route path="/user/my-booking" element={<MyBooking />} />
                         <Route path="/user/favorite" element={<Favorite />} />
-
                     </Route>
 
                     <Route

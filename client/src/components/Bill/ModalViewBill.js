@@ -5,8 +5,11 @@ import axios from 'axios';
 import Bill from './Bill';
 import StripePaymentModal from './StripePaymentModal';
 import { toast } from 'react-toastify';
+import { useSelector } from 'react-redux';
 
 function ModalViewBill({ show, setShow, dataBill }) {
+    const user = useSelector((state) => state.auth.user);
+    console.log(user);
     const [showPaymentModal, setShowPaymentModal] = useState(false);
 
     const handleClose = () => setShow(false);
@@ -49,13 +52,17 @@ function ModalViewBill({ show, setShow, dataBill }) {
                 </Modal.Header>
                 <Modal.Body>{dataBill ? <Bill billData={dataBill} /> : <p>Không có dữ liệu hóa đơn.</p>}</Modal.Body>
                 <Modal.Footer>
-                    <Button
-                        className="opacity-50 cursor-not-allowed"
-                        onClick={handlePayment}
-                        disabled={dataBill.status === 'Paid'}
-                    >
-                        Thanh toán
-                    </Button>
+                    {user.isAdmin === false ? (
+                        <Button
+                            className="opacity-50 cursor-not-allowed"
+                            onClick={handlePayment}
+                            disabled={dataBill.status === 'Paid'}
+                        >
+                            Thanh toán
+                        </Button>
+                    ) : (
+                        ''
+                    )}
                     <Button variant="secondary" onClick={handleClose}>
                         Đóng
                     </Button>

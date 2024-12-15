@@ -161,15 +161,12 @@ const DetailRoom = () => {
                                                         alt=""
                                                     />
                                                 </div>
-                                                {room.imageUrls.slice(1).map((room) => (
-                                                    <div className="carousel-item" key={room.fileName}>
-                                                        <img
-                                                            src={`${serverURL + room.filePath}`}
-                                                            className="d-block w-100"
-                                                            alt=""
-                                                        />
-                                                    </div>
-                                                ))}
+
+                                                <img
+                                                    src={room.imageUrls[0].filePath}
+                                                    className="d-block w-100"
+                                                    alt=""
+                                                />
                                             </div>
 
                                             <ol className="carousel-indicators">

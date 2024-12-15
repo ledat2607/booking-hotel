@@ -8,6 +8,7 @@ import searchSlice from '../../store/searchSlice';
 import DateRange from '../../components/DateRange/DateRange';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import './Search.scss';
 
 const Search = () => {
     const searchInfor = useSelector((state) => state.search);
@@ -66,18 +67,15 @@ const Search = () => {
         getAllTypeRoom();
         setLoading(false);
         document.documentElement.scrollTop = 500;
-    }, [isChange, page]);
+    }, [searchInfor, page]); // Re-fetch data when search information or page changes
 
     const getRoomsBySearch = async (infor) => {
         try {
             const res = await searchRooms(infor);
-
             const data = res.data;
-
             if (res.status !== 200) {
                 throw new Error(data.message);
             }
-
             setRooms(data);
         } catch (error) {
             console.log(error);
@@ -106,6 +104,7 @@ const Search = () => {
             return true;
         }
     };
+    console.log(`check room`, rooms);
     return (
         <>
             <div className="breadcrumb-area bg-img bg-overlay jarallax">
@@ -151,18 +150,8 @@ const Search = () => {
                                                 setIsShowDateRange={setIsShowDateRange}
                                             />
                                         </div>
-                                        {/* <label htmlFor="checkIn">Ngày nhận phòng</label>
-                                        <input type="date" className="form-control" id="checkIn" name="checkin-date" /> */}
                                     </div>
-                                    {/* <div className="col-6 col-md-2 col-lg-3">
-                                        <label htmlFor="checkOut">Ngày trả phòng</label>
-                                        <input
-                                            type="date"
-                                            className="form-control"
-                                            id="checkOut"
-                                            name="checkout-date"
-                                        />
-                                    </div> */}
+
                                     <div className="col-4 col-md-1" style={{ width: '150px' }}>
                                         <label htmlFor="type-room">Loại:</label>
                                         <select name="type-room" id="type-room" className="form-control form-select">
@@ -216,7 +205,26 @@ const Search = () => {
                     <h4>Không có kết quả nào phù hợp</h4>
                 </div>
             ) : (
-                <SearchContent roomData={rooms} curPage={page} handleChangePage={handleChangePage} />
+                <div className="room-list">
+                    {rooms.results.results.map((room) => (
+                        <div className="room-card" key={room._id}>
+                            <div className="room-image">
+                                <img
+                                    src={`http://localhost:5000/uploads/${room.imageUrls[0]?.filePath}`}
+                                    alt={room.roomNumber}
+                                />
+                            </div>
+                            <div className="room-details">
+                                <h4 className="room-number">Phòng {room.roomNumber}</h4>
+                                <p className="room-description">{room.description}</p>
+                                <p className="room-price">{`Giá: ${room.price.toLocaleString()} VND`}</p>
+                                <p className="room-type">{`Loại phòng: ${room.type}`}</p>
+                                <p className="room-max-count">{`Sức chứa: ${room.maxCount} người`}</p>
+                                <button className="btn btn-primary">Xem chi tiết</button>
+                            </div>
+                        </div>
+                    ))}
+                </div>
             )}
         </>
     );

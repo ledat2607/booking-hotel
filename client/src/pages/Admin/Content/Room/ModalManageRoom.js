@@ -35,9 +35,7 @@ function ModalManageRoom({ show, setShow, modalType, typeOptions, dataRoom, fetc
             setDescription(dataRoom.description);
             setNote(dataRoom.note);
             if (dataRoom.imageUrls.length > 0) {
-                setImagesSource(
-                    dataRoom.imageUrls.map((image) => `${process.env.REACT_APP_SERVER_URL}${image.filePath}`),
-                );
+                setImagesSource(dataRoom.imageUrls.map((image) => `${image.filePath}`));
             }
             if (dataRoom.rentperDate && dataRoom.checkOutDate) {
                 setDateRange([
@@ -151,7 +149,6 @@ function ModalManageRoom({ show, setShow, modalType, typeOptions, dataRoom, fetc
             handleClose();
         }
     };
-
     return (
         <Modal
             show={show}

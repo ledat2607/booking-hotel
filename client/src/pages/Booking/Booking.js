@@ -271,7 +271,7 @@ const BookingScreen = () => {
                 {room._id && (
                     <div className="card" style={{ width: 18 + 'rem' }}>
                         <img
-                            src={`http://localhost:5000/${room.imageUrls[0].filePath}`}
+                            src={room.imageUrls[0].filePath}
                             width={150}
                             height={150}
                             className="card-img-top"

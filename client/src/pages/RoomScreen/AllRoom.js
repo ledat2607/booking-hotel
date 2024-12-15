@@ -69,7 +69,7 @@ function AllRoom(props) {
                                     data-aos-anchor-placement="center-bottom"
                                 >
                                     <div className="room-thumbnail">
-                                        <img src={`${serverURL + room.imageUrls[0].filePath}`} alt="" />
+                                        <img src={room.imageUrls[0].filePath} alt="" />
                                     </div>
 
                                     <div className="room-content">
