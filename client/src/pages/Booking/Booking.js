@@ -4,13 +4,15 @@ import { Form, FormElement } from '@progress/kendo-react-form';
 import { useParams } from 'react-router-dom';
 import { Button } from '@progress/kendo-react-buttons';
 import { Stepper } from '@progress/kendo-react-layout';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { FormInputInfor, ConfirmInfor, Bill } from './formComponents';
 import bookingSlice from '../../store/bookingSlice';
 import { getRoomById, searchRooms } from '../../services/apiServices';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import './Booking.scss';
+
+import ModalAddress from './ModalAddress';
 
 const inputInfor = (
     <div>
@@ -30,13 +32,24 @@ const bill = (
 const stepPages = [inputInfor, confirmInfor, bill];
 
 const BookingScreen = () => {
+    const user = useSelector((state) => state.auth.user);
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const params = useParams();
     const [room, setRoom] = useState({});
     const [step, setStep] = useState(0);
     const [formState, setFormState] = useState({});
+    const [isAddressModalOpen, setAddressModalOpen] = useState(false);
 
+    useEffect(() => {
+        if (!user.address) {
+            setAddressModalOpen(true);
+        }
+    }, [user]);
+
+    const handleUpdateAddress = () => {
+        navigate('/user/edit-profile');
+    };
     const GetDetailRoom = async (roomId) => {
         try {
             const res = await getRoomById(roomId);
@@ -191,6 +204,11 @@ const BookingScreen = () => {
     );
     return (
         <div className="h-100 booking-container" style={{ backgroundColor: 'rgb(238,238,238)' }}>
+            <ModalAddress
+                isOpen={isAddressModalOpen}
+                onClose={() => setAddressModalOpen(false)}
+                onUpdate={handleUpdateAddress}
+            />
             <div className="form-booking-container h-100 my-5">
                 <div
                     className="  "

@@ -36,6 +36,7 @@ const LoginController = async (req, res) => {
                 id: user._id,
                 username: user.username,
                 isAdmin: user.isAdmin,
+                address: user.address,
                 createdAt: user.createdAt,
                 updatedAt: user.updatedAt,
             },

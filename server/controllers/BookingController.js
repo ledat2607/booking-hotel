@@ -118,6 +118,7 @@ const createBookingWithBill = async (req, res) => {
             checkInDate,
             checkOutDate,
             totalAmount,
+            address:customerList[1]
         });
 
         const BookingRoom = await Room.findById({ _id: roomId });

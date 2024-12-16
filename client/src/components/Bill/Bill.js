@@ -20,7 +20,12 @@ function Bill({ billData }) {
     const calcDateDiff = (startDate, endDate) => (endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24) + 1;
 
     return (
-        <div ref={ref} className="booking-bill-container">
+        <div ref={ref} className={`booking-bill-container ${billData?.status === 'Paid' ? 'bill-paid' : ''}`}>
+            {billData?.status === 'Paid' && (
+                <div className="paid-stamp">
+                    <span>ĐÃ THANH TOÁN</span>
+                </div>
+            )}
             <table className="table table-bordered table-hover">
                 <thead>
                     <tr className="table-dark">
@@ -48,7 +53,7 @@ function Bill({ billData }) {
                         <th scope="col" colSpan="5">
                             <div className="d-flex table-row-header-custom">
                                 <div className="w-50">
-                                    Ngày thanh toán: {formatDate(new Date(billData?.dateOfPayment))}
+                                    Ngày đặt phòng: {formatDate(new Date(billData?.dateOfPayment))}
                                 </div>
                                 <div className="w-50">
                                     Trị giá: <FormatPrice>{billData?.totalAmount}</FormatPrice> VND
