@@ -184,13 +184,11 @@ const BookingScreen = () => {
                 checkDate(data).then((available) => {
                     if (available) {
                         toast.success('Đặt phòng thành công');
-                    } else {
-                        toast.success('Thành công');
-                    }
-                });
+                    } 
+                })
             }
             if (isLastStep) {
-                navigate('/User/My-Booking');
+                navigate('/user/my-booking');
             }
         },
         [steps, isLastStep, step, lastStepIndex],

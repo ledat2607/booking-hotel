@@ -9,7 +9,7 @@ const jwt = require('jsonwebtoken');
 
 const changeInfo = asyncHandler(async (req, res) => {
     const { username, email, Name, phoneNumber, CMND, address, typeUser, isAdmin, avatar } = req.body;
-    console.log(avatar);
+
     const id = req.params.id;
 
     if (!username && !email && !Name && !CMND && !address && !typeUser && !isAdmin) {

@@ -11,7 +11,7 @@ function Footer() {
                         <div className="col-12 col-sm-12 col-lg-6">
                             <div className="single-footer-widget">
                                 <Link href="/" className="footer-logo">
-                                    <img src={images.logoLight} alt="logo" />
+                                    <img src={images.logo} alt="logo" />
                                 </Link>
                             </div>
                         </div>

@@ -4,23 +4,23 @@ import { Line } from 'react-chartjs-2';
 import 'chart.js/auto'; // Đảm bảo Chart.js được import
 
 import { REACT_APP_BASE_URL } from '../../../../constant';
-import './DashBoard.scss'; // Import file SCSS
+import './DashBoard.scss';
 
 function Dashboard() {
-    const [duLieuBooking, setDuLieuBooking] = useState([]);
     const [duLieuPhong, setDuLieuPhong] = useState([]);
     const [bookingDaThanhToan, setBookingDaThanhToan] = useState([]);
     const [phongDaThanhToan, setPhongDaThanhToan] = useState([]);
+    const [topUsers, setTopUsers] = useState([]);
 
     // Lấy dữ liệu booking từ API
     useEffect(() => {
         axios
             .get(`${REACT_APP_BASE_URL}booking/all`)
             .then((res) => {
-                setDuLieuBooking(res.data.bookings);
+                const bookings = res.data.bookings;
 
                 // Lọc các booking có trạng thái 'Paid'
-                const daThanhToan = res.data.bookings.filter((booking) => booking.status === 'Paid');
+                const daThanhToan = bookings.filter((booking) => booking.status === 'Paid');
                 setBookingDaThanhToan(daThanhToan);
             })
             .catch((err) => console.log(err));
@@ -33,6 +33,29 @@ function Dashboard() {
             .then((res) => setDuLieuPhong(res.data.data))
             .catch((err) => console.log(err));
     }, []);
+
+    // Lấy dữ liệu người dùng từ API và tính toán top 3 người dùng chi tiêu cao nhất
+    useEffect(() => {
+        axios
+            .get(`${REACT_APP_BASE_URL}user/all`)
+            .then((res) => {
+                const users = res.data.users;
+
+                // Giả sử mỗi booking có userId và số tiền đã thanh toán
+                const userSpendings = users.map((user) => {
+                    const totalSpent = bookingDaThanhToan
+                        .filter((booking) => booking.user._id === user._id)
+                        .reduce((sum, booking) => sum + parseInt(booking.totalAmount), 0);
+
+                    return { ...user, totalSpent };
+                });
+
+                // Sắp xếp và lấy top 3 người dùng
+                const sortedUsers = userSpendings.sort((a, b) => b.totalSpent - a.totalSpent);
+                setTopUsers(sortedUsers.slice(0, 3));
+            })
+            .catch((err) => console.log(err));
+    }, [bookingDaThanhToan]);
 
     // Kết nối dữ liệu phòng và booking đã thanh toán
     useEffect(() => {
@@ -66,9 +89,34 @@ function Dashboard() {
 
     return (
         <div className="thong-ke-doanh-thu">
-            <h2 className="title">Thống Kê Doanh Thu Các Phòng</h2>
+            <h2 className="title">Thống Kê Doanh Thu</h2>
 
-            {/* Hiển thị bảng */}
+            {/* Widget Top 3 Người Dùng */}
+            <div className="top-users-widget">
+                <h3>Top 3 Người Dùng Chi Tiêu Cao Nhất</h3>
+                <table className="data-table">
+                    <thead>
+                        <tr>
+                            <th>Vị Trí</th>
+                            <th>Tên Người Dùng</th>
+                            <th>Email</th>
+                            <th>Tổng Chi Tiêu (VND)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {topUsers.map((user, index) => (
+                            <tr key={user._id} className={`top-${index + 1}`}>
+                                <td>{index + 1}</td>
+                                <td>{user.Name}</td>
+                                <td>{user.email}</td>
+                                <td>{user.totalSpent.toLocaleString()}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+
+            {/* Hiển thị bảng phòng */}
             <table className="data-table">
                 <thead>
                     <tr>

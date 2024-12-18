@@ -5,7 +5,7 @@ import { GrClose } from 'react-icons/gr';
 import images from '../../../assets/images';
 import Sidebar from './Sidebar';
 import { useState } from 'react';
-
+import './Header.scss';
 const MainContent = () => {
     const [collapsedSidebar, setCollapsedSidebar] = useState(true);
 

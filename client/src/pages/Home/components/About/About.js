@@ -13,7 +13,7 @@ function About() {
                                 <h2 data-aos="fade-up">
                                     Chào mừng đến với
                                     <br />
-                                    Roberto Hotel Luxury
+                                    Sora Hotel Luxury
                                 </h2>
                             </div>
 

@@ -31,15 +31,35 @@
         }
 
         tr {
-            transition: background-color 0.3s ease;
+            transition: background-color 0.3s ease, transform 0.3s ease;
         }
 
         tr:hover {
             background-color: #f1f1f1;
+            transform: scale(1.02);
         }
 
         td {
             color: #555;
+        }
+
+        /* Hiệu ứng cho Top 3 */
+        tr.top-1 {
+            background-color: #e5e4e2; /* Màu kim cương */
+            font-weight: bold;
+            color: #000;
+        }
+
+        tr.top-2 {
+            background-color: #c0c0c0; /* Màu bạc */
+            font-weight: bold;
+            color: #000;
+        }
+
+        tr.top-3 {
+            background-color: #ffd700; /* Màu vàng */
+            font-weight: bold;
+            color: #000;
         }
     }
 
